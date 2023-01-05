@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -31,6 +32,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import com.example.LibraryManagementProject.dto.BookDto;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -80,8 +82,13 @@ public class LibrarianControllerTest {
         ResultActions resultActions = mockMvc.perform(requestBuilder);
         MvcResult mvcResult = resultActions.andReturn();
         assertEquals(mvcResult.getResponse().getStatus(), HttpStatus.CREATED.value());
+    }
 
-
+    @Test
+    public void deleteBookSuccess_Test() throws Exception{
+        Mockito.when(librarianService.deleteBook).thenReturn("Book successfully deleted");
+        mockMvc.perform(MockMvcRequestBuilders.delete("/admin/delete"))
+                .andExpect(status().isOk());
 
     }
 

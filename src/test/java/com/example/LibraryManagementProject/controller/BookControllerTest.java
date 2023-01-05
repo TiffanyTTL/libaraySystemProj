@@ -63,7 +63,6 @@ public class BookControllerTest {
     private RequestAttributes attributes;
 
 
-
     //set up spring test in stand alone mode
     @Before
     public void setUp() {
@@ -114,47 +113,48 @@ public class BookControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.bookQuantity").value("2"));
     }
 
-//    @Test
-//    public void getAllBooksByAuthorSuccessTest() throws Exception {
-//        List<Book> bookList1 = new ArrayList<>();
-//        Book bookAuthor = new Book();
-//        bookAuthor.setBookTitle("Clean Code");
-//        bookAuthor.setBookAuthor("Craig Walls");
-//        bookAuthor.setBookISBN(9369722);
-//        bookAuthor.setBookQuantity(2);
-//        bookList1.add(bookAuthor);
-//        when(bookService.getAllBooksByAuthor(String.valueOf(bookAuthor))).thenReturn(bookList1);
-//        mockMvc.perform(MockMvcRequestBuilders
-//                        .get("/books/bookauthor/Craig Walls")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .accept(MediaType.APPLICATION_JSON))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(MockMvcResultMatchers.jsonPath("$[0].bookTitle").value("Clean Code"))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$[0].bookAuthor").value("Craig Walls"))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$[0].bookISBN").value("9369722"))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$[0].bookQuantity").value("2"));
-
-
     @Test
-    public void getAllBooksByISBNNumberTest() throws Exception {
-        Book bookISBN = new Book();
-        bookISBN.setBookTitle("Clean Code");
-        bookISBN.setBookAuthor("Craig Walls");
-        bookISBN.setBookISBN(9369722);
-        bookISBN.setBookQuantity(2);
-        when(bookService.getBookByISBNNumber(anyInt())).thenReturn(bookISBN);
+    public void getAllBooksByAuthorSuccessTest() throws Exception {
+        List<Book> bookList1 = new ArrayList<>();
+        Book bookAuthor = new Book();
+        bookAuthor.setBookTitle("Clean Code");
+        bookAuthor.setBookAuthor("Craig Walls");
+        bookAuthor.setBookISBN(9369722);
+        bookAuthor.setBookQuantity(2);
+        bookList1.add(bookAuthor);
+        when(bookService.getAllBooksByAuthor(String.valueOf(bookAuthor))).thenReturn(bookList1);
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/books/bookisbn/9369722")
+                        .get("/books/bookauthor/Craig Walls")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.bookTitle").value("Clean Code"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.bookAuthor").value("Craig Walls"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.bookISBN").value("9369722"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.bookQuantity").value("2"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].bookTitle").value("Clean Code"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].bookAuthor").value("Craig Walls"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].bookISBN").value("9369722"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].bookQuantity").value("2"));
     }
+
+
+        @Test
+        public void getAllBooksByISBNNumberTest() throws Exception {
+            Book bookISBN = new Book();
+            bookISBN.setBookTitle("Clean Code");
+            bookISBN.setBookAuthor("Craig Walls");
+            bookISBN.setBookISBN(9369722);
+            bookISBN.setBookQuantity(2);
+            when(bookService.getBookByISBNNumber(anyInt())).thenReturn(bookISBN);
+            mockMvc.perform(MockMvcRequestBuilders
+                            .get("/books/bookisbn/9369722")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaType.APPLICATION_JSON))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.bookTitle").value("Clean Code"))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.bookAuthor").value("Craig Walls"))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.bookISBN").value("9369722"))
+                    .andExpect(MockMvcResultMatchers.jsonPath("$.bookQuantity").value("2"));
+        }
 
 
 //    @Test
@@ -187,25 +187,27 @@ public class BookControllerTest {
 //    }
 
 
-    @Test
-    public void testCreateBook() {
+            @Test
+            public void testCreateBook () {
 
 
-        Book book = new Book();
-        book.setBookAuthor("Josh Long");
-        book.setBookISBN(45013867);
-        book.setBookQuantity(1);
-        book.setBookTitle("Cloud-Native Java");
-        BookRepository bookRepository = mock(BookRepository.class);
-        when(bookRepository.insert((Book) org.mockito.Mockito.any())).thenReturn(book);
-        BookController bookController = new BookController(new BookService(bookRepository));
+                Book book = new Book();
+                book.setBookAuthor("Josh Long");
+                book.setBookISBN(45013867);
+                book.setBookQuantity(1);
+                book.setBookTitle("Cloud-Native Java");
+                BookRepository bookRepository = mock(BookRepository.class);
+                when(bookRepository.insert((Book) org.mockito.Mockito.any())).thenReturn(book);
+                BookController bookController = new BookController(new BookService(bookRepository));
 
-        Book book1 = new Book();
-        book1.setBookAuthor("Josh Long");
-        book1.setBookISBN(45013867);
-        book1.setBookQuantity(1);
-        book1.setBookTitle("Cloud-Native Java");
-        assertSame(book1, bookController.createBook(book1));
-        verify(bookRepository).insert((Book) org.mockito.Mockito.any());
-    }
-}
+                Book book1 = new Book();
+                book1.setBookAuthor("Josh Long");
+                book1.setBookISBN(45013867);
+                book1.setBookQuantity(1);
+                book1.setBookTitle("Cloud-Native Java");
+                assertSame(book1, bookController.createBook(book1));
+                verify(bookRepository).insert((Book) org.mockito.Mockito.any());
+            }
+        }
+
+

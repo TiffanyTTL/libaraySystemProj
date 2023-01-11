@@ -44,6 +44,12 @@ public class BookService {
         return bookRepository.findBookByBookISBN(bookISBN);
     }
 
+    //delete books
+    public Book deleteBook(int bookISBN); {
+        return bookRepository.findBookByBookISBN(bookISBN);
+
+    }
+
 
     }
 

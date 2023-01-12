@@ -1,19 +1,15 @@
 package com.example.LibraryManagementProject.controller;
 
 import com.example.LibraryManagementProject.model.Book;
-import com.example.LibraryManagementProject.repository.BookRepository;
-import com.example.LibraryManagementProject.repository.LibrarianRepository;
 import com.example.LibraryManagementProject.service.BookService;
 import com.example.LibraryManagementProject.service.LibrarianService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,8 +26,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import com.example.LibraryManagementProject.dto.BookDto;
-
+import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -86,9 +83,17 @@ public class LibrarianControllerTest {
 
     @Test
     public void deleteBookSuccess_Test() throws Exception{
-        Mockito.when(librarianService.deleteBook).thenReturn("Book successfully deleted");
-        mockMvc.perform(MockMvcRequestBuilders.delete("/admin/delete"))
-                .andExpect(status().isOk());
+        BookDto bookDto = new BookDto();
+        bookDto.setBookTitle("Cloud-Native Java");
+        bookDto.setBookAuthor("Josh Long");
+        bookDto.setBookISBN(45013867);
+        bookDto.setBookQuantity(9);
+        Mockito.when(librarianService.deleteBook(700886452)).thenReturn("Book successfully deleted");
+                mockMvc.perform(delete("/admin/remove-book")
+                                .param("bookISBNNumber", "700886452")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(status().isOk());
+
 
     }
 

@@ -1,6 +1,7 @@
 package com.example.LibraryManagementProject.controller;
 
 import com.example.LibraryManagementProject.model.Book;
+import com.example.LibraryManagementProject.repository.BookRepository;
 import com.example.LibraryManagementProject.service.BookService;
 import com.example.LibraryManagementProject.service.LibrarianService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,8 +27,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import com.example.LibraryManagementProject.dto.BookDto;
-import static org.mockito.Mockito.when;
+
+import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -64,21 +67,25 @@ public class LibrarianControllerTest {
     }
 
     @Test
-    public void createNewBooksSuccess_Test() throws Exception{
-        BookDto book = new BookDto();
-        book.setBookTitle("Java Concurrency in Practice");
-        book.setBookAuthor("Joshua Bloch");
-        book.setBookISBN(700886452);
-        book.setBookQuantity(9);
-        ObjectMapper objectMapper = new ObjectMapper();
-        String bookDto = objectMapper.writeValueAsString(book);
-        MockHttpServletRequestBuilder requestBuilder =
-                MockMvcRequestBuilders.post("/admin/create")
-                .content(bookDto)
-                .contentType(MediaType.APPLICATION_JSON);
-        ResultActions resultActions = mockMvc.perform(requestBuilder);
-        MvcResult mvcResult = resultActions.andReturn();
-        assertEquals(mvcResult.getResponse().getStatus(), HttpStatus.CREATED.value());
+    public void testCreateBook () {
+
+
+        Book book = new Book();
+        book.setBookAuthor("Josh Long");
+        book.setBookISBN(45013867);
+        book.setBookQuantity(1);
+        book.setBookTitle("Cloud-Native Java");
+        BookRepository bookRepository = mock(BookRepository.class);
+        when(bookRepository.insert((Book) org.mockito.Mockito.any())).thenReturn(book);
+        BookController bookController = new BookController(new BookService(bookRepository));
+
+        Book book1 = new Book();
+        book1.setBookAuthor("Josh Long");
+        book1.setBookISBN(45013867);
+        book1.setBookQuantity(1);
+        book1.setBookTitle("Cloud-Native Java");
+        assertSame(book1, bookController.createBook(book1));
+        verify(bookRepository).insert((Book) org.mockito.Mockito.any());
     }
 
     @Test

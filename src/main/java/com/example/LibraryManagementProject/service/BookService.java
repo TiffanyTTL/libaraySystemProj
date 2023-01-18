@@ -2,56 +2,60 @@ package com.example.LibraryManagementProject.service;
 
 import com.example.LibraryManagementProject.model.Book;
 import com.example.LibraryManagementProject.repository.BookRepository;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
+/**
+ * Service class for books.
+ */
 @Service
 public class BookService {
 
-    @Autowired
+  @Autowired
     private BookRepository bookRepository;
 
-    public BookService(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
+  public BookService(BookRepository bookRepository) {
+    this.bookRepository = bookRepository;
+  }
 
-    //add new book
-    public Book createNewBook(Book book) {
-        bookRepository.insert(book);
-        return book;
+  /**
+   * create new book method.
+   */
+  public  Book createNewBook(Book book) {
+    bookRepository.insert(book);
+    return book;
 
-    }
+  }
 
-    //get all books
-    public List<Book> getAllBooks(){
-       return bookRepository.findAll();
-    }
+  /**
+   * get all books method.
+   */
+  public List<Book> getAllBooks() {
+    return bookRepository.findAll();
+  }
 
-    //get books by book title
-    public Book getAllBooksByTitle(String bookTitle){
-        return bookRepository.findBookByBookTitle(bookTitle);
-    }
+  /**
+   * get all books by the title method.
+   */
+  public Book getAllBooksByTitle(String bookTitle) {
+    return bookRepository.findBookByBookTitle(bookTitle);
+  }
 
-    //get books by author
-    public List<Book> getAllBooksByAuthor(String bookAuthor){
-        return bookRepository.findBookByBookAuthor(bookAuthor);
-    }
+  /**
+   * get all books by the author method.
+   */
+  public List<Book> getAllBooksByAuthor(String bookAuthor) {
+    return bookRepository.findBookByBookAuthor(bookAuthor);
+  }
 
-    //get books by ISBNNumber
-    public Book getBookByISBNNumber(int bookISBN){
-        return bookRepository.findBookByBookISBN(bookISBN);
-    }
-
-    //delete books
-    public Book deleteBook(int bookISBN); {
-        return bookRepository.findBookByBookISBN(bookISBN);
-
-    }
-
-
-    }
+  /**
+   * get all books by the ISBN Number method.
+   */
+  public Book getBookByISBNNumber(int bookISBN) {
+    return bookRepository.findBookByBookISBN(bookISBN);
+  }
+}
 
 
 

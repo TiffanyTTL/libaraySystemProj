@@ -8,27 +8,29 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document("Users")
 public class User {
 
-    @Id
-    @Indexed(unique = true)
-    public String userID;
-    @Field(name = "User Email Address")
-    public String userEmailAddress;
+  @Id
+  @Indexed(unique = true)
+  public String userID;
+  @Field(name = "User Email Address")
+  public String userEmailAddress;
 
-    public User() {
+  public User() {
 
-    }
+  }
 
-    public User( String userEmailAddress) {
+  public User(String userEmailAddress) {
 
-        this.userEmailAddress = userEmailAddress;
-    }
+    this.userEmailAddress = userEmailAddress;
+  }
 
-    public String getUserEmailAddress() {
-        return userEmailAddress;
-    }
+  public String getUserEmailAddress() {
 
-    public void setUserEmailAddress(String userEmailAddress) {
-        this.userEmailAddress = userEmailAddress;
-    }
+    return  userEmailAddress;
+  }
+
+  public void setUserEmailAddress(String userEmailAddress) {
+
+    this.userEmailAddress = userEmailAddress;
+  }
 
 }

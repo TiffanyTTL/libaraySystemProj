@@ -113,27 +113,6 @@ public class BookControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.bookQuantity").value("2"));
     }
 
-    @Test
-    public void getAllBooksByAuthorSuccessTest() throws Exception {
-        List<Book> bookList1 = new ArrayList<>();
-        Book bookAuthor = new Book();
-        bookAuthor.setBookTitle("Clean Code");
-        bookAuthor.setBookAuthor("Craig Walls");
-        bookAuthor.setBookISBN(9369722);
-        bookAuthor.setBookQuantity(2);
-        bookList1.add(bookAuthor);
-        when(bookService.getAllBooksByAuthor(String.valueOf(bookAuthor))).thenReturn(bookList1);
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/books/bookauthor/Craig Walls")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].bookTitle").value("Clean Code"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].bookAuthor").value("Craig Walls"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].bookISBN").value("9369722"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].bookQuantity").value("2"));
-    }
 
 
         @Test

@@ -1,64 +1,77 @@
 package com.example.LibraryManagementProject.controller;
 
 import com.example.LibraryManagementProject.model.Book;
-import com.example.LibraryManagementProject.repository.BookRepository;
 import com.example.LibraryManagementProject.service.BookService;
+import java.util.List;
+import lombok.extern.log4j.Log4j2;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.logging.Logger;
 
+/**
+ * book controller class.
+ */
+@Log4j2
 @RestController
 @RequestMapping("/books")
 public class BookController {
 
-    Logger logger = (Logger) LoggerFactory.getLogger(BookController.class);
+  @Autowired
+  BookService bookService;
 
-    @Autowired
-    BookService bookService;
+  public BookController(BookService bookService) {
+    this.bookService = bookService;
+  }
 
+  Logger logger = LoggerFactory.getLogger(BookController.class);
 
-    public BookController(BookService bookService) {
-        this.bookService = bookService;
-    }
-
-    @PostMapping("/create")
+  /**
+   * post mapping request, used to create new book.
+   */
+  @PostMapping("/create")
     public Book createBook(@RequestBody Book book) {
-        logger.info("Book Created");
-        return bookService.createNewBook(book);
+    logger.info("Book Created");
+    return bookService.createNewBook(book);
 
-    }
+  }
 
-    //get all books
-    @GetMapping("/all")
+  /**
+   * Get mapping request, used to get all available book.
+   */
+  @GetMapping ("/all")
     public List<Book> getAllBooks() {
-        logger.info("All Books Returned");
-        return bookService.getAllBooks();
-    }
+    logger.info("All Books Returned");
+    return bookService.getAllBooks();
+  }
 
-    //get all books by the book title
-    @GetMapping("/booktitle/{bookTitle}")
+  /**
+   * Get mapping request, used to get all available book by title.
+   */
+  @GetMapping("/booktitle/{bookTitle}")
     public Book getAllBooksByTitle(@PathVariable String bookTitle) {
-        logger.info("Books By Specified Title Returned");
-        return bookService.getAllBooksByTitle(bookTitle);
-    }
+    logger.info("Books By Specified Title Returned");
+    return bookService.getAllBooksByTitle(bookTitle);
+  }
 
-
-    //get all books by the author
-    @GetMapping("/bookauthor/{bookAuthor}")
+  /**
+   * Get mapping request, used to get all available book by authors name.
+   */
+  @GetMapping ("/bookauthor/{bookAuthor}")
     public List<Book> getAllBooksByAuthor(@PathVariable String bookAuthor) {
-        logger.info("Books By Specified Author Returned");
-        return bookService.getAllBooksByAuthor(bookAuthor);
-    }
+    logger.info("Books By Specified Author Returned");
+    return bookService.getAllBooksByAuthor(bookAuthor);
+  }
 
-    @GetMapping("/bookisbn/{bookISBN}")
-    public Book getAllBooksByISBNNumber(@PathVariable int bookISBN) {
-        logger.info("Book By Specified ISBN Number Returned");
-        return bookService.getBookByISBNNumber(bookISBN);
-    }
+  /**
+   * Get mapping request, used to get all available book by its ISBN.
+   */
+  @GetMapping("/bookisbn/{bookISBN}")
+    public Book getAllBooksByIsbnNumber(@PathVariable int bookISBN) {
+  logger.info("Book By Specified ISBN Number Returned");
+    return bookService.getBookByISBNNumber(bookISBN);
+  }
 }
 
 

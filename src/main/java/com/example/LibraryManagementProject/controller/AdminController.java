@@ -3,8 +3,10 @@ package com.example.LibraryManagementProject.controller;
 import com.example.LibraryManagementProject.model.Book;
 import com.example.LibraryManagementProject.repository.BookRepository;
 import com.example.LibraryManagementProject.service.BookService;
-import com.example.LibraryManagementProject.service.LibrarianService;
+import com.example.LibraryManagementProject.service.AdminService;
 import lombok.extern.log4j.Log4j2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,11 +16,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Log4j2
 @RequestMapping("/admin")
-public class LibrarianController {
+public class AdminController {
 
 
   @Autowired
-    LibrarianService librarianService;
+  AdminService adminService;
 
 
   Book book;
@@ -30,17 +32,18 @@ public class LibrarianController {
     BookRepository bookRepository;
 
 
-  public LibrarianController(LibrarianService librarianService) {
-    this.librarianService = librarianService;
+  public AdminController(AdminService adminService) {
+    this.adminService = adminService;
   }
-  //Logger logger = (Logger) LoggerFactory.getLogger(LibrarianController.class);
+
+  Logger logger = LoggerFactory.getLogger(BookController.class);
 
   /**
    * Post request method to create/add books to the library.
    */
   @PostMapping("/create")
     public Book createBook(@RequestBody Book book) {
-    // logger.info("Book Created");
+    logger.info("Book Created");
     return bookService.createNewBook(book);
   }
 
@@ -49,7 +52,8 @@ public class LibrarianController {
    */
   @DeleteMapping("/remove-book")
     public String deleteBook(@RequestParam int bookISBNNumber) {
-    librarianService.deleteBook(bookISBNNumber);
+    adminService.deleteBook(bookISBNNumber);
+    logger.info("Book Deleted");
     return "Book Deleted Successfully";
   }
 }

@@ -1,11 +1,10 @@
 package com.example.LibraryManagementProject.controller;
 
-import com.example.LibraryManagementProject.dto.LibrarianDto;
+import com.example.LibraryManagementProject.dto.AdminDto;
 import com.example.LibraryManagementProject.model.Book;
 import com.example.LibraryManagementProject.repository.BookRepository;
 import com.example.LibraryManagementProject.service.BookService;
-import com.example.LibraryManagementProject.service.LibrarianService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.LibraryManagementProject.service.AdminService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,20 +14,12 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
-import com.example.LibraryManagementProject.dto.BookDto;
 
 import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class LibrarianControllerTest {
+public class AdminControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -49,10 +40,10 @@ public class LibrarianControllerTest {
     private BookService bookService;
 
     @Mock
-    private LibrarianService librarianService;
+    private AdminService adminService;
 
     @InjectMocks
-    LibrarianController librarianController;
+    AdminController librarianController;
 
     @Mock
     private Book book;
@@ -62,16 +53,21 @@ public class LibrarianControllerTest {
 
 
 
-    //set up spring test in stand-alone mode
+    /**
+     * set up spring test in stand-alone mode
+     */
     @Before
     public void setUp() {
         RequestContextHolder.setRequestAttributes(attributes);
         this.mockMvc = MockMvcBuilders.standaloneSetup(librarianController).build();
     }
 
+    /**
+     * test method, that should pass if
+     * book is successfully created
+     */
     @Test
     public void testCreateBook () {
-
 
         Book book = new Book();
         book.setBookAuthor("Josh Long");
@@ -91,15 +87,20 @@ public class LibrarianControllerTest {
         verify(bookRepository).insert((Book) org.mockito.Mockito.any());
     }
 
+    /**
+     * Test method that should pass if book
+     * has been successfully deleted
+     */
+
     @Test
     public void deleteBookSuccess_Test() throws Exception{
-        LibrarianDto librarianDto = new LibrarianDto();
-        librarianDto.setLibrarianEmailAddress("tiffany@lib.com");
-        librarianDto.setBookTitle("Cloud-Native Java");
-        librarianDto.setBookAuthor("Josh Long");
-        librarianDto.setBookISBN(45013867);
-        librarianDto.setBookQuantity(9);
-        Mockito.when(librarianService.deleteBook(45013867)).thenReturn("Book successfully deleted");
+        AdminDto adminDto = new AdminDto();
+        adminDto.setLibrarianEmailAddress("tiffany@lib.com");
+        adminDto.setBookTitle("Cloud-Native Java");
+        adminDto.setBookAuthor("Josh Long");
+        adminDto.setBookISBN(45013867);
+        adminDto.setBookQuantity(9);
+        Mockito.when(adminService.deleteBook(45013867)).thenReturn("Book successfully deleted");
                 mockMvc.perform(delete("/admin/remove-book")
                                 .param("bookISBNNumber", "45013867")
                                 .accept(MediaType.APPLICATION_JSON)

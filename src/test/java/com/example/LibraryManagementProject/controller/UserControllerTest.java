@@ -80,15 +80,17 @@ public class UserControllerTest {
         library.setIssueDate(LocalDate.parse("2022-09-21"));
         library.setDueDate(LocalDate.parse("2022-10-01"));
         LibraryRepository libraryRepository = mock(LibraryRepository.class);
-        when(libraryRepository.insert((Library) org.mockito.Mockito.any()))
-                .thenReturn(library);
+        when(libraryRepository.insert((Library) org.mockito.Mockito.any())).thenReturn(library);
+        User user = new User();
+        user.setUserEmailAddress("tiff@lib.com");
+        when(userRepository.findUserByUserEmailAddress("tiff@lib.com")).thenReturn(user);
         UserController userController = new UserController(new UserService(libraryRepository));
         Library library1 = new Library();
         library1.setUserEmailAddress("tiff@lib.com");
         library1.setBookISBN(12345678);
         library.setIssueDate(LocalDate.parse("2022-09-21"));
         library1.setDueDate(LocalDate.parse("2022-10-01"));
-        assertSame(library1, userController.checkOutBook(library1));
+        assertSame(library1, userController.checkOutBook(library1, 7));
         verify(libraryRepository).insert((Library) org.mockito.Mockito.any());
 
         }

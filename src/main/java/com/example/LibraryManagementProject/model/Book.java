@@ -3,7 +3,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-
+/**
+ * Book model class.
+ */
 
 @Document("Books")
 public class Book {
@@ -20,6 +22,9 @@ public class Book {
   int bookQuantity;
 
 
+  /**
+   * book constructor
+   */
   public Book(String bookTitle, String bookAuthor, int bookISBN, int bookQuantity) {
     this.bookTitle = bookTitle;
     this.bookAuthor = bookAuthor;
@@ -61,6 +66,14 @@ public class Book {
 
   public void setBookQuantity(int bookQuantity) {
     this.bookQuantity = bookQuantity;
+  }
+
+  public void borrowBook() {
+    this.bookQuantity--;
+  }
+
+  public void returnBook() {
+    this.bookQuantity++;
   }
 
   @Override

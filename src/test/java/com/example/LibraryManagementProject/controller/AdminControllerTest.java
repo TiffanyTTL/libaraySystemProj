@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -37,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@ContextConfiguration
 public class AdminControllerTest {
 
     @Autowired
@@ -129,8 +131,8 @@ public class AdminControllerTest {
         checkOutBookForUserRequestBody.setAdminEmailAddress("libby@lib.com");
         checkOutBookForUserRequestBody.setUserEmailAddress("lori@lib.com");
         checkOutBookForUserRequestBody.setBookIsbn(45678901);
-        Mockito.when(adminService.checkOutBook)(checkOutBookForUserRequestBody)).thenReturn("lori@lib.com has borrowed one copy of 45678901!");
-        String jsonBody = "{\"adminEmailAddress\":\"libby@lib.com\", \" +\"userEmailAddress\":\"lori@lib.comm\", " +
+        Mockito.when(adminService.checkOutBook(checkOutBookForUserRequestBody)).thenReturn("lori@lib.com has borrowed one copy of 45678901!");
+        String jsonBody = "{\"adminEmailAddress\":\"libby@lib.com\", " + "\"userEmailAddress\":\"lori@lib.comm\", " +
                 "\"bookISBN\":\"45678901\"," +
                 "\"borrowForDays\":\"7\"}";
         mockMvc.perform(
@@ -141,8 +143,6 @@ public class AdminControllerTest {
                                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
     }
-
-
 
 
 

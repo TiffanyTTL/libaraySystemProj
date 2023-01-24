@@ -5,10 +5,13 @@ import com.example.LibraryManagementProject.model.Admin;
 import com.example.LibraryManagementProject.model.Book;
 import com.example.LibraryManagementProject.repository.AdminRepository;
 import com.example.LibraryManagementProject.repository.BookRepository;
+import com.example.LibraryManagementProject.requestbody.CheckOutBookForUserRequestBody;
+import com.example.LibraryManagementProject.requestbody.CheckoutBookRequestBody;
 import com.example.LibraryManagementProject.service.BookService;
 import com.example.LibraryManagementProject.service.AdminService;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -19,6 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -114,23 +118,34 @@ public class AdminControllerTest {
     }
 
     /**
-     * test method, that should pass if
-     * book is successfully created
+     * Test method that should pass if book
+     * has been successfully deleted
      */
+
     @Test
-    public void testCreateAdmin () {
-
-        Admin admin = new Admin();
-        admin.setAdminEmailAddress("libby@lib.com");
-        AdminRepository adminRepository = mock(AdminRepository.class);
-        when(AdminRepository.insert((Admin) org.mockito.Mockito.any())).thenReturn(admin);
-
-        AdminController adminController = new AdminController(new AdminService(adminRepository));
-        Admin admin1 = new Admin();
-        admin1.setAdminEmailAddress("libby@lib.com");
-        assertSame(admin1, adminController.createAdmin(admin1));
-        verify(adminRepository).insert((Admin) org.mockito.Mockito.any());
+    @DisplayName("Test Should Pass If Admin Successfully Checked Out Book For User")
+    public void checkInBookForUserSuccess_Test() throws Exception{
+        CheckOutBookForUserRequestBody checkOutBookForUserRequestBody = new CheckOutBookForUserRequestBody();
+        checkOutBookForUserRequestBody.setAdminEmailAddress("libby@lib.com");
+        checkOutBookForUserRequestBody.setUserEmailAddress("lori@lib.com");
+        checkOutBookForUserRequestBody.setBookIsbn(45678901);
+        Mockito.when(adminService.checkOutBook)(checkOutBookForUserRequestBody)).thenReturn("lori@lib.com has borrowed one copy of 45678901!");
+        String jsonBody = "{\"adminEmailAddress\":\"libby@lib.com\", \" +\"userEmailAddress\":\"lori@lib.comm\", " +
+                "\"bookISBN\":\"45678901\"," +
+                "\"borrowForDays\":\"7\"}";
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .post("/admin/checkout")
+                                .content(jsonBody)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
     }
 
 
-}
+
+
+
+    }
+
+

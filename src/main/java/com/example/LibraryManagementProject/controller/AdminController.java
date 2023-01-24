@@ -1,13 +1,17 @@
 package com.example.LibraryManagementProject.controller;
 
+import com.example.LibraryManagementProject.model.Admin;
 import com.example.LibraryManagementProject.model.Book;
 import com.example.LibraryManagementProject.repository.BookRepository;
+import com.example.LibraryManagementProject.requestbody.CheckOutBookForUserRequestBody;
+import com.example.LibraryManagementProject.requestbody.CheckoutBookRequestBody;
 import com.example.LibraryManagementProject.service.AdminService;
 import com.example.LibraryManagementProject.service.BookService;
 import lombok.extern.log4j.Log4j2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -48,6 +52,15 @@ public class AdminController {
   }
 
   /**
+   * Post request method to create/add books to the library.
+   */
+  @PostMapping("/createAdmin")
+  public String createAdmin(@RequestBody Admin admin) {
+    logger.info("Admin Created");
+    return adminService.createNewAdmin(admin);
+  }
+
+  /**
    * Delete request method, to remove books from the library.
    */
   @DeleteMapping("/remove-book")
@@ -55,5 +68,15 @@ public class AdminController {
     adminService.deleteBook(bookISBNNumber);
     logger.info("Book Deleted");
     return "Book Deleted Successfully";
+  }
+
+  /**
+   * Post request method to borrow books to the user.
+   */
+  @PostMapping("/checkout")
+  @ResponseStatus(HttpStatus.CREATED)
+  public String checkOutBook(@RequestBody CheckOutBookForUserRequestBody checkOutBookForUserRequestBody) {
+    logger.info("Book successfully checked out");
+    return adminService.checkOutBook(checkOutBookForUserRequestBody);
   }
 }

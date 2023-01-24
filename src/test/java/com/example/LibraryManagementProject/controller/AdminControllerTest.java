@@ -1,7 +1,9 @@
 package com.example.LibraryManagementProject.controller;
 
 import com.example.LibraryManagementProject.dto.AdminDto;
+import com.example.LibraryManagementProject.model.Admin;
 import com.example.LibraryManagementProject.model.Book;
+import com.example.LibraryManagementProject.repository.AdminRepository;
 import com.example.LibraryManagementProject.repository.BookRepository;
 import com.example.LibraryManagementProject.service.BookService;
 import com.example.LibraryManagementProject.service.AdminService;
@@ -109,6 +111,25 @@ public class AdminControllerTest {
                         .andExpect(status().isOk());
 
 
+    }
+
+    /**
+     * test method, that should pass if
+     * book is successfully created
+     */
+    @Test
+    public void testCreateAdmin () {
+
+        Admin admin = new Admin();
+        admin.setAdminEmailAddress("libby@lib.com");
+        AdminRepository adminRepository = mock(AdminRepository.class);
+        when(AdminRepository.insert((Admin) org.mockito.Mockito.any())).thenReturn(admin);
+
+        AdminController adminController = new AdminController(new AdminService(adminRepository));
+        Admin admin1 = new Admin();
+        admin1.setAdminEmailAddress("libby@lib.com");
+        assertSame(admin1, adminController.createAdmin(admin1));
+        verify(adminRepository).insert((Admin) org.mockito.Mockito.any());
     }
 
 

@@ -71,15 +71,20 @@ public class BookControllerTest {
     }
 
 
+    //get all book test
     @Test
     public void getAllBooksSuccessTest() throws Exception {
+        // created a list of book
         List<Book> bookList = new ArrayList<>();
+        //created a new book object
         Book book = new Book();
         book.setBookTitle("Clean Code");
         book.setBookAuthor("Craig Walls");
         book.setBookISBN(9369722);
         book.setBookQuantity(2);
+        //added the new book object with the new fields to the list
         bookList.add(book);
+        //when get all books method is called, return the list of books created
         when(bookService.getAllBooks()).thenReturn(bookList);
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/books/all")
@@ -95,11 +100,13 @@ public class BookControllerTest {
 
     @Test
     public void getAllBooksByTitleSuccessTest() throws Exception {
+        //created a new book object called booktitle
         Book bookTitle = new Book();
         bookTitle.setBookTitle("Clean Code");
         bookTitle.setBookAuthor("Craig Walls");
         bookTitle.setBookISBN(9369722);
         bookTitle.setBookQuantity(2);
+        //when get all books by title method is called, return the new object booktitle
         when(bookService.getAllBooksByTitle(any())).thenReturn(bookTitle);
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/books/booktitle/Clean Code")
@@ -134,37 +141,6 @@ public class BookControllerTest {
                     .andExpect(MockMvcResultMatchers.jsonPath("$.bookISBN").value("9369722"))
                     .andExpect(MockMvcResultMatchers.jsonPath("$.bookQuantity").value("2"));
         }
-
-
-//    @Test
-//    public void createBookSuccessTest() throws Exception {
-////        Book book1 = new Book();
-////        book1.setBookTitle("Clean Code");
-////        book1.setBookAuthor("Robert Martin");
-////        book1.setBookISBN(17014367);
-////        book1.setBookQuantity(3);
-////        given(bookService.createNewBook(book1)).willReturn(book1);
-//        mockMvc.perform(MockMvcRequestBuilders
-//                        .post("/books/create")
-//                        .content(asJsonString(new Book()))
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .accept(MediaType.APPLICATION_JSON))
-//                .andDo(print())
-//                .andExpect(status().isCreated())
-//                .andExpect((ResultMatcher) jsonPath("$[0].bookTitle", is(book1.getBookTitle())))
-//                .andExpect((ResultMatcher) jsonPath("$[0].bookAuthor", is(book1.getBookAuthor())))
-//                .andExpect((ResultMatcher) jsonPath("$[0].bookISBN", is(book1.getBookISBN())))
-//                .andExpect((ResultMatcher) jsonPath("$[0].bookQuantity", is(book1.getBookQuantity())));
-//    }
-//
-//    public static String asJsonString(final Object obj) {
-//        try {
-//            return new ObjectMapper().writeValueAsString(obj);
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
 
             @Test
             public void testCreateBook () {

@@ -8,6 +8,8 @@ import com.example.LibraryManagementProject.repository.AdminRepository;
 import com.example.LibraryManagementProject.repository.BookRepository;
 import com.example.LibraryManagementProject.repository.LibraryRepository;
 import com.example.LibraryManagementProject.repository.UserRepository;
+import com.example.LibraryManagementProject.requestbody.CheckInBookForUserRequestBody;
+import com.example.LibraryManagementProject.requestbody.CheckInBookRequestBody;
 import com.example.LibraryManagementProject.requestbody.CheckOutBookForUserRequestBody;
 import com.example.LibraryManagementProject.requestbody.CheckoutBookRequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,8 +68,8 @@ public class AdminService {
   }
 
   /**
-   * method to allow a user.
-   * to check out a book.
+   * method to allow admin.
+   * to check out a book on behalf of the user.
    */
   public String checkOutBook(CheckOutBookForUserRequestBody checkOutBookForUserRequestBody) {
 
@@ -89,6 +91,28 @@ public class AdminService {
     libraryRepository.save(library);
     return user.getUserEmailAddress() + " has borrowed one copy of \"" + book.getBookTitle() + "\"!";
   }
+
+  /**
+   * method to allow admin.
+   * to check in a book on behalf of the user .
+   */
+  public String checkInBook(CheckInBookForUserRequestBody checkInBookForUserRequestBody) {
+
+    User user = userRepository.findUserByUserEmailAddress(checkInBookForUserRequestBody.getUserEmailAddress());
+    Admin admin = adminRepository.findAdminByAdminEmailAddress(checkInBookForUserRequestBody.getAdminEmailAddress());
+    Book book = bookRepository.findBookByBookISBN(checkInBookForUserRequestBody.getBookIsbn());
+
+    book.returnBook();
+    bookRepository.save(book);
+    LocalDate currentDate = LocalDate.now();
+    Library library = new Library();
+    library.setReturnDate(currentDate);
+    libraryRepository.save(library);
+    return user.getUserEmailAddress() + " has returned copy of \"" + book.getBookTitle() + "\"!";
+
+  }
+
+
 
 
 }

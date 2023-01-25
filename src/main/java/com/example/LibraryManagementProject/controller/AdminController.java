@@ -4,9 +4,7 @@ import com.example.LibraryManagementProject.model.Admin;
 import com.example.LibraryManagementProject.model.Book;
 import com.example.LibraryManagementProject.repository.BookRepository;
 import com.example.LibraryManagementProject.requestbody.CheckInBookForUserRequestBody;
-import com.example.LibraryManagementProject.requestbody.CheckInBookRequestBody;
 import com.example.LibraryManagementProject.requestbody.CheckOutBookForUserRequestBody;
-import com.example.LibraryManagementProject.requestbody.CheckoutBookRequestBody;
 import com.example.LibraryManagementProject.service.AdminService;
 import com.example.LibraryManagementProject.service.BookService;
 import lombok.extern.log4j.Log4j2;
@@ -14,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**

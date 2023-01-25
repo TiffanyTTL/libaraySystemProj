@@ -11,6 +11,8 @@ import com.example.LibraryManagementProject.repository.UserRepository;
 import com.example.LibraryManagementProject.requestbody.CheckOutBookForUserRequestBody;
 import com.example.LibraryManagementProject.requestbody.CheckoutBookRequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -73,8 +75,9 @@ public class AdminService {
     Admin admin = adminRepository.findAdminByAdminEmailAddress(checkOutBookForUserRequestBody.getAdminEmailAddress());
     Book book = bookRepository.findBookByBookISBN(checkOutBookForUserRequestBody.getBookIsbn());
 
-    if (book.getBookQuantity() < 1) {
-      return "The book \"" + book.getBookTitle() + "\" is out of stock!";
+
+      if (book.getBookQuantity() < 1) {
+        return "The book \"" + book.getBookTitle() + "\" is out of stock!";
     }
     book.borrowBook();
     bookRepository.save(book);

@@ -8,6 +8,7 @@ import com.example.LibraryManagementProject.repository.UserRepository;
 import com.example.LibraryManagementProject.requestbody.CheckInBookRequestBody;
 import com.example.LibraryManagementProject.requestbody.CheckoutBookRequestBody;
 import com.example.LibraryManagementProject.service.UserService;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -22,10 +23,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -85,13 +91,17 @@ public class UserControllerTest {
         String jsonBody = "{\"userEmailAddress\":\"tiff@lib.com\", " +
                 "\"bookISBN\":\"12345678\"," +
                 "\"borrowForDays\":\"7\"}";
-        mockMvc.perform(
-                        MockMvcRequestBuilders
-                                .post("/user/checkout")
-                                .content(jsonBody)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
+        MvcResult result = (MvcResult) mockMvc.perform(post("/user/checkout")
+                        .content(jsonBody)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andReturn();
+        String content = result.getResponse().getContentAsString();
+        Assert.assertNotNull(content);
+        //assert.equal(checkbod)
+        System.out.println(content);
     }
 
 
@@ -101,16 +111,19 @@ public class UserControllerTest {
         CheckInBookRequestBody checkInBookRequestBody = new CheckInBookRequestBody();
         checkInBookRequestBody.setUserEmailAddress("libby@lib.com");
         checkInBookRequestBody.setBookIsbn(87654321);
-        Mockito.when(userService.checkInBook(checkInBookRequestBody)).thenReturn("libby@lib.com has returned copy of 12345678!");
+        Mockito.when(userService.checkInBook(checkInBookRequestBody)).thenReturn("libby@lib.com has returned copy of 87654321!");
         String jsonBody1 = "{\"userEmailAddress\":\"libby@lib.com\", " +
                 "\"bookISBN\":\"87654321\"}";
-        mockMvc.perform(
-                        MockMvcRequestBuilders
-                                .put("/user/checkin")
-                                .content(jsonBody1)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
+        MvcResult result = (MvcResult) mockMvc.perform(put("/user/checkin")
+                        .content(jsonBody1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andReturn();
+        String content = result.getResponse().getContentAsString();
+        Assert.assertNotNull(content);
+        System.out.println(content);
 
 
     }

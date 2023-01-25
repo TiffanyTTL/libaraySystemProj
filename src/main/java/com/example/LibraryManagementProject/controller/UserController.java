@@ -49,7 +49,7 @@ public class UserController {
    * Post request method to create a user.
    */
   @PostMapping("/createUser")
-  public String createBook(@RequestBody User user) {
+  public String createUser(@RequestBody User user) {
     logger.info("User Created");
     return userService.createUser(user);
 
@@ -57,7 +57,7 @@ public class UserController {
 
   @PutMapping("/checkin")
   @ResponseStatus(HttpStatus.CREATED)
-  public String CheckInBook(@RequestBody CheckInBookRequestBody checkInBookRequestBody) {
+  public String checkInBook(@RequestBody CheckInBookRequestBody checkInBookRequestBody) {
     logger.info("Book successfully checked in");
     return userService.checkInBook(checkInBookRequestBody);
   }

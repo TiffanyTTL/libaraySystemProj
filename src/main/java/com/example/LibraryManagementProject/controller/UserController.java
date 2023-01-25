@@ -36,7 +36,7 @@ public class UserController {
   Logger logger = LoggerFactory.getLogger(BookController.class);
 
   /**
-   * Post request method to borrow books to the user.
+   * Post request method to borrow books.
    */
   @PostMapping("/checkout")
   @ResponseStatus(HttpStatus.CREATED)
@@ -55,6 +55,9 @@ public class UserController {
 
   }
 
+  /**
+   * Put request method to return books.
+   */
   @PutMapping("/checkin")
   @ResponseStatus(HttpStatus.CREATED)
   public String checkInBook(@RequestBody CheckInBookRequestBody checkInBookRequestBody) {

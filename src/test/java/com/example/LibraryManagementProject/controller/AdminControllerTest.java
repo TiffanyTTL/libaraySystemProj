@@ -34,7 +34,7 @@ import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.springframework.test.web.servlet.result.RequestResultMatchers;
@@ -46,7 +46,6 @@ import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -147,13 +146,13 @@ public class AdminControllerTest {
         checkOutBookForUserRequestBody.setUserEmailAddress("lori@lib.com");
         checkOutBookForUserRequestBody.setBookIsbn(45678901);
         Mockito.when(adminService.checkOutBook(checkOutBookForUserRequestBody)).thenReturn("lori@lib.com has borrowed one copy of 45678901!");
-        String jsonBody = "{\"adminEmailAddress\":\"libby@lib.com\", " + "\"userEmailAddress\":\"lori@lib.comm\", " +
+        String jsonBody = "{\"adminEmailAddress\":\"libby@lib.com\", " + "\"userEmailAddress\":\"lori@lib.com\", " +
                 "\"bookISBN\":\"45678901\"," +
                 "\"borrowForDays\":\"7\"}";
         MvcResult result = (MvcResult) mockMvc.perform(post("/admin/checkout")
-                                .content(jsonBody)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .accept(MediaType.APPLICATION_JSON))
+                        .content(jsonBody)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -162,30 +161,33 @@ public class AdminControllerTest {
         System.out.println(content);
 
 
+    }
+
+    @Test
+    @DisplayName("Test Should Pass If Book Has Been Returned to the Library")
+    public void bookReturned_SuccessTest() throws Exception {
+        CheckInBookForUserRequestBody checkInBookForUserRequestBody = new CheckInBookForUserRequestBody();
+        checkInBookForUserRequestBody.setAdminEmailAddress("libby@lib.com");
+        checkInBookForUserRequestBody.setUserEmailAddress("lori@lib.com");
+        checkInBookForUserRequestBody.setBookIsbn(87654321);
+        Mockito.when(adminService.checkInBook(checkInBookForUserRequestBody)).thenReturn("libby@lib.com has returned copy of 87654321!");
+        String jsonBody1 = "{\"adminEmailAddress\":\"libby@lib.com\", " + "\"userEmailAddress\":\"lori@lib.com\", " +
+                "\"bookISBN\":\"45678901\"}";
+        MvcResult result = (MvcResult) mockMvc.perform(put("/admin/checkin")
+                        .content(jsonBody1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andReturn();
+        String content = result.getResponse().getContentAsString();
+        Assert.assertNotNull(content);
+        System.out.println(content);
+
 
     }
 
 
-
-//    @Test
-//    @DisplayName("Test Should Pass If Admin Successfully Checks In Book For User")
-//    public void checkInBookForUserSuccess_Test() throws Exception {
-//        CheckInBookForUserRequestBody checkInBookForUserRequestBody = new CheckInBookForUserRequestBody();
-//        checkInBookForUserRequestBody.setAdminEmailAddress("libby@lib.com");
-//        checkInBookForUserRequestBody.setUserEmailAddress("lori@lib.com");
-//        checkInBookForUserRequestBody.setBookIsbn(23456789);
-//        Mockito.when(adminService.checkInBook(checkInBookForUserRequestBody)).thenReturn("libby@lib.com has returned copy of 23456789!");
-//        String jsonBody1 = "{\"adminEmailAddress\":\"libby@lib.com\", " + "\"userEmailAddress\":\"lori@lib.comm\", " +
-//                "\"bookISBN\":\"45678901\"}";
-//        mockMvc.perform(
-//                        MockMvcRequestBuilders
-//                                .put("/admin/checkin")
-//                                .content(jsonBody1)
-//                                .contentType(MediaType.APPLICATION_JSON)
-//                                .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isCreated());
-//    }
 }
-
 
 

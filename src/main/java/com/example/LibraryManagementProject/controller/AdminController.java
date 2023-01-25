@@ -3,6 +3,8 @@ package com.example.LibraryManagementProject.controller;
 import com.example.LibraryManagementProject.model.Admin;
 import com.example.LibraryManagementProject.model.Book;
 import com.example.LibraryManagementProject.repository.BookRepository;
+import com.example.LibraryManagementProject.requestbody.CheckInBookForUserRequestBody;
+import com.example.LibraryManagementProject.requestbody.CheckInBookRequestBody;
 import com.example.LibraryManagementProject.requestbody.CheckOutBookForUserRequestBody;
 import com.example.LibraryManagementProject.requestbody.CheckoutBookRequestBody;
 import com.example.LibraryManagementProject.service.AdminService;
@@ -72,7 +74,7 @@ public class AdminController {
   }
 
   /**
-   * Post request method to borrow books to the user.
+   * Post request method to borrow books on behalf of the user.
    */
   @PostMapping("/checkout")
   @ResponseStatus(HttpStatus.OK)
@@ -80,5 +82,15 @@ public class AdminController {
   {
     logger.info("Book successfully checked out");
     return adminService.checkOutBook(checkOutBookForUserRequestBody);
+  }
+
+  /**
+   * Put request method to return books on behalf of the user.
+   */
+  @PutMapping("/checkin")
+  @ResponseStatus(HttpStatus.CREATED)
+  public String checkInBook(@RequestBody CheckInBookForUserRequestBody checkInBookForUserRequestBody) {
+    logger.info("Book successfully checked in");
+    return adminService.checkInBook(checkInBookForUserRequestBody);
   }
 }

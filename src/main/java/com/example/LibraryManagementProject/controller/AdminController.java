@@ -2,7 +2,7 @@ package com.example.LibraryManagementProject.controller;
 
 import com.example.LibraryManagementProject.model.Admin;
 import com.example.LibraryManagementProject.model.Book;
-import com.example.LibraryManagementProject.repository.BookRepository;
+import com.example.LibraryManagementProject.repository.AdminRepository;
 import com.example.LibraryManagementProject.requestbody.CheckInBookForUserRequestBody;
 import com.example.LibraryManagementProject.requestbody.CheckOutBookForUserRequestBody;
 import com.example.LibraryManagementProject.service.AdminService;
@@ -22,18 +22,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/admin")
 public class AdminController {
 
+  @Autowired
+  private AdminService adminService;
+
 
   @Autowired
-  AdminService adminService;
+  private BookService bookService;
 
-
-  Book book;
 
   @Autowired
-    BookService bookService;
-
-  @Autowired
-    BookRepository bookRepository;
+  private AdminRepository adminRepository;
 
 
   public AdminController(AdminService adminService) {
@@ -58,7 +56,7 @@ public class AdminController {
   public String createAdmin(@RequestBody Admin admin) {
     logger.info("Admin Created");
     return adminService.createNewAdmin(admin);
-  }
+    }
 
   /**
    * Delete request method, to remove books from the library.
@@ -75,8 +73,8 @@ public class AdminController {
    */
   @PostMapping("/checkout")
   @ResponseStatus(HttpStatus.OK)
-  public String checkOutBook(@RequestBody CheckOutBookForUserRequestBody checkOutBookForUserRequestBody)
-  {
+  public String checkOutBook(
+          @RequestBody CheckOutBookForUserRequestBody checkOutBookForUserRequestBody) {
     logger.info("Book successfully checked out");
     return adminService.checkOutBook(checkOutBookForUserRequestBody);
   }
@@ -86,8 +84,9 @@ public class AdminController {
    */
   @PutMapping("/checkin")
   @ResponseStatus(HttpStatus.CREATED)
-  public String checkInBook(@RequestBody CheckInBookForUserRequestBody checkInBookForUserRequestBody) {
-    logger.info("Book successfully checked in");
-    return adminService.checkInBook(checkInBookForUserRequestBody);
+  public String checkInBook(
+          @RequestBody CheckInBookForUserRequestBody checkInBookForUserRequestBody) {
+   logger.info("Book successfully checked in");
+   return adminService.checkInBook(checkInBookForUserRequestBody);
   }
 }

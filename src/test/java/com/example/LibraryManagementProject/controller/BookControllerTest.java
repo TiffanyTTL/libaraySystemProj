@@ -3,9 +3,7 @@ package com.example.LibraryManagementProject.controller;
 import com.example.LibraryManagementProject.model.Book;
 import com.example.LibraryManagementProject.repository.BookRepository;
 import com.example.LibraryManagementProject.service.BookService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -17,26 +15,20 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertSame;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -121,48 +113,47 @@ public class BookControllerTest {
     }
 
 
+    @Test
+    public void getAllBooksByISBNNumberTest() throws Exception {
+        Book bookISBN = new Book();
+        bookISBN.setBookTitle("Clean Code");
+        bookISBN.setBookAuthor("Craig Walls");
+        bookISBN.setBookISBN(9369722);
+        bookISBN.setBookQuantity(2);
+        when(bookService.getBookByISBNNumber(anyInt())).thenReturn(bookISBN);
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/books/bookisbn/9369722")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.bookTitle").value("Clean Code"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.bookAuthor").value("Craig Walls"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.bookISBN").value("9369722"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.bookQuantity").value("2"));
+    }
 
-        @Test
-        public void getAllBooksByISBNNumberTest() throws Exception {
-            Book bookISBN = new Book();
-            bookISBN.setBookTitle("Clean Code");
-            bookISBN.setBookAuthor("Craig Walls");
-            bookISBN.setBookISBN(9369722);
-            bookISBN.setBookQuantity(2);
-            when(bookService.getBookByISBNNumber(anyInt())).thenReturn(bookISBN);
-            mockMvc.perform(MockMvcRequestBuilders
-                            .get("/books/bookisbn/9369722")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON))
-                    .andDo(print())
-                    .andExpect(status().isOk())
-                    .andExpect(MockMvcResultMatchers.jsonPath("$.bookTitle").value("Clean Code"))
-                    .andExpect(MockMvcResultMatchers.jsonPath("$.bookAuthor").value("Craig Walls"))
-                    .andExpect(MockMvcResultMatchers.jsonPath("$.bookISBN").value("9369722"))
-                    .andExpect(MockMvcResultMatchers.jsonPath("$.bookQuantity").value("2"));
-        }
-
-            @Test
-            public void testCreateBook () {
+    @Test
+    public void testCreateBook() {
 
 
-                Book book = new Book();
-                book.setBookAuthor("Josh Long");
-                book.setBookISBN(45013867);
-                book.setBookQuantity(1);
-                book.setBookTitle("Cloud-Native Java");
-                BookRepository bookRepository = mock(BookRepository.class);
-                when(bookRepository.insert((Book) org.mockito.Mockito.any())).thenReturn(book);
-                BookController bookController = new BookController(new BookService(bookRepository));
+        Book book = new Book();
+        book.setBookAuthor("Josh Long");
+        book.setBookISBN(45013867);
+        book.setBookQuantity(1);
+        book.setBookTitle("Cloud-Native Java");
+        BookRepository bookRepository = mock(BookRepository.class);
+        when(bookRepository.insert((Book) org.mockito.Mockito.any())).thenReturn(book);
+        BookController bookController = new BookController(new BookService(bookRepository));
 
-                Book book1 = new Book();
-                book1.setBookAuthor("Josh Long");
-                book1.setBookISBN(45013867);
-                book1.setBookQuantity(1);
-                book1.setBookTitle("Cloud-Native Java");
-                assertSame(book1, bookController.createBook(book1));
-                verify(bookRepository).insert((Book) org.mockito.Mockito.any());
-            }
-        }
+        Book book1 = new Book();
+        book1.setBookAuthor("Josh Long");
+        book1.setBookISBN(45013867);
+        book1.setBookQuantity(1);
+        book1.setBookTitle("Cloud-Native Java");
+        assertSame(book1, bookController.createBook(book1));
+        verify(bookRepository).insert((Book) org.mockito.Mockito.any());
+    }
+}
 
 

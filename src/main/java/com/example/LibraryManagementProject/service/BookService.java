@@ -50,7 +50,7 @@ public class BookService {
   }
 
   /**
-   * get all books by the ISBN Number method.
+   * get all books by the ISBN method.
    */
   public Book getBookByISBNNumber(int bookISBN) {
     return bookRepository.findBookByBookISBN(bookISBN);

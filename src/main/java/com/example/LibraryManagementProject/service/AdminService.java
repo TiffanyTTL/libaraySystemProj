@@ -2,22 +2,18 @@ package com.example.LibraryManagementProject.service;
 
 import com.example.LibraryManagementProject.model.Admin;
 import com.example.LibraryManagementProject.model.Book;
-import com.example.LibraryManagementProject.model.Library;
+import com.example.LibraryManagementProject.model.BookOrder;
 import com.example.LibraryManagementProject.model.User;
 import com.example.LibraryManagementProject.repository.AdminRepository;
+import com.example.LibraryManagementProject.repository.BookOrderRepository;
 import com.example.LibraryManagementProject.repository.BookRepository;
-import com.example.LibraryManagementProject.repository.LibraryRepository;
 import com.example.LibraryManagementProject.repository.UserRepository;
 import com.example.LibraryManagementProject.requestbody.CheckInBookForUserRequestBody;
-import com.example.LibraryManagementProject.requestbody.CheckInBookRequestBody;
 import com.example.LibraryManagementProject.requestbody.CheckOutBookForUserRequestBody;
-import com.example.LibraryManagementProject.requestbody.CheckoutBookRequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import java.time.LocalDate;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 
 /**
  * Service class for admin.
@@ -25,26 +21,30 @@ import java.time.LocalDate;
 @Service
 public class AdminService {
 
+
   @Autowired
   private BookRepository bookRepository;
 
   @Autowired
-  AdminRepository adminRepository;
+  private AdminRepository adminRepository;
 
   @Autowired
   private UserRepository userRepository;
 
   @Autowired
-  LibraryRepository libraryRepository;
+  private BookOrderRepository bookOrderRepository;
 
 
+  /**
+   * constructor for admin service.
+   */
   public AdminService(BookRepository bookRepository) {
     this.bookRepository = bookRepository;
   }
 
 
   /**
-   * create new book method
+   * create new book method.
    */
   public Book createNewBook(Book book) {
     bookRepository.insert(book);
@@ -52,7 +52,7 @@ public class AdminService {
   }
 
   /**
-   * delete book method
+   * delete book method.
    */
   public String deleteBook(int bookISBN) {
     bookRepository.deleteBookByBookISBN(bookISBN);
@@ -60,7 +60,7 @@ public class AdminService {
   }
 
   /**
-   * create new book method
+   * create new book method.
    */
   public String createNewAdmin(Admin admin) {
     adminRepository.insert(admin);
@@ -77,24 +77,23 @@ public class AdminService {
     Admin admin = adminRepository.findAdminByAdminEmailAddress(checkOutBookForUserRequestBody.getAdminEmailAddress());
     Book book = bookRepository.findBookByBookISBN(checkOutBookForUserRequestBody.getBookIsbn());
 
-
-      if (book.getBookQuantity() < 1) {
-        return "The book \"" + book.getBookTitle() + "\" is out of stock!";
+    if (book.getBookQuantity() < 1) {
+      return "The book \"" + book.getBookTitle() + "\" is out of stock!";
     }
     book.borrowBook();
     bookRepository.save(book);
     LocalDate currentDate = LocalDate.now();
     LocalDate overdueDate = currentDate.plusDays(checkOutBookForUserRequestBody.getBorrowForDays());
-    Library library = new Library();
-    library.setIssueDate(currentDate);
-    library.setDueDate(overdueDate);
-    libraryRepository.save(library);
+    BookOrder bookOrder = new BookOrder();
+    bookOrder.setIssueDate(currentDate);
+    bookOrder.setDueDate(overdueDate);
+    bookOrderRepository.save(bookOrder);
     return user.getUserEmailAddress() + " has borrowed one copy of \"" + book.getBookTitle() + "\"!";
   }
 
   /**
    * method to allow admin.
-   * to check in a book on behalf of the user .
+   * to check in a book on behalf of the user.
    */
   public String checkInBook(CheckInBookForUserRequestBody checkInBookForUserRequestBody) {
 
@@ -105,12 +104,14 @@ public class AdminService {
     book.returnBook();
     bookRepository.save(book);
     LocalDate currentDate = LocalDate.now();
-    Library library = new Library();
-    library.setReturnDate(currentDate);
-    libraryRepository.save(library);
+    BookOrder bookOrder = new BookOrder();
+    bookOrder.setActualReturnedDate(currentDate);
+    bookOrderRepository.save(bookOrder);
     return user.getUserEmailAddress() + " has returned copy of \"" + book.getBookTitle() + "\"!";
 
   }
+
+
 
 
 

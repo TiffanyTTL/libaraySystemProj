@@ -11,20 +11,35 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document("Books")
 public class Book {
 
+  /**
+   * ID field.
+   */
   @Id
   String bookID;
+  /**
+   * Book title field.
+   */
   @Field(name = "Book Title")
   String bookTitle;
+  /**
+   * Book author field.
+   */
   @Field(name = "Book Author")
   String bookAuthor;
+  /**
+   * Book Isbn field.
+   */
   @Field(name = "ISBN Number")
   int bookISBN;
+  /**
+   * Book quantity field.
+   */
   @Field(name = "Quantity")
   int bookQuantity;
 
 
   /**
-   * book constructor
+   * book constructor.
    */
   public Book(String bookTitle, String bookAuthor, int bookISBN, int bookQuantity) {
     this.bookTitle = bookTitle;
@@ -76,6 +91,11 @@ public class Book {
   public void returnBook() {
     this.bookQuantity++;
   }
+
+  public void returnDate() {
+    this.bookQuantity++;
+  }
+
 
   @Override
     public String toString() {

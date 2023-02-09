@@ -1,14 +1,12 @@
 package com.example.LibraryManagementProject.controller;
 
 import com.example.LibraryManagementProject.dto.AdminDto;
-import com.example.LibraryManagementProject.model.Admin;
 import com.example.LibraryManagementProject.model.Book;
-import com.example.LibraryManagementProject.repository.AdminRepository;
+import com.example.LibraryManagementProject.model.User;
 import com.example.LibraryManagementProject.repository.BookRepository;
 import com.example.LibraryManagementProject.requestbody.CheckInBookForUserRequestBody;
-import com.example.LibraryManagementProject.requestbody.CheckInBookRequestBody;
 import com.example.LibraryManagementProject.requestbody.CheckOutBookForUserRequestBody;
-import com.example.LibraryManagementProject.requestbody.CheckoutBookRequestBody;
+import com.example.LibraryManagementProject.requestbody.FrequentLateReturnersRequestBody;
 import com.example.LibraryManagementProject.service.BookService;
 import com.example.LibraryManagementProject.service.AdminService;
 import org.junit.Assert;
@@ -22,32 +20,27 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultMatcher;
+
+import static org.junit.Assert.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import org.springframework.test.web.servlet.result.RequestResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.assertSame;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -158,6 +151,7 @@ public class AdminControllerTest {
                 .andReturn();
         String content = result.getResponse().getContentAsString();
         Assert.assertNotNull(content);
+        assertEquals("lori@lib.com has borrowed one copy of 45678901!", adminService.checkOutBook(checkOutBookForUserRequestBody));
         System.out.println(content);
 
 
@@ -182,10 +176,29 @@ public class AdminControllerTest {
                 .andReturn();
         String content = result.getResponse().getContentAsString();
         Assert.assertNotNull(content);
+        assertEquals("libby@lib.com has returned copy of 87654321!", adminService.checkInBook(checkInBookForUserRequestBody));
         System.out.println(content);
 
 
     }
+
+//    @Test
+//    public void getAllFrequentLateReturners() throws Exception {
+//            // created a list of users
+//            List<FrequentLateReturnersRequestBody> frequentLateReturnersRequestBodyList = new ArrayList<>();
+//            FrequentLateReturnersRequestBody frequentLateReturnersRequestBody = new FrequentLateReturnersRequestBody();
+//            frequentLateReturnersRequestBody.setUserEmailAddress("libby@lib.com");
+//            frequentLateReturnersRequestBodyList.add(frequentLateReturnersRequestBody);d
+//            //when get all books method is called, return the list of books created
+//            when(adminService.getAllFrequeentLateReturners()).thenReturn(frequentLateReturnersRequestBodyList);
+//            mockMvc.perform(MockMvcRequestBuilders
+//                            .get("/addmin/LateReturns")
+//                            .contentType(MediaType.APPLICATION_JSON)
+//                            .accept(MediaType.APPLICATION_JSON))
+//                    .andDo(print())
+//                    .andExpect(status().isOk())
+//                    .andExpect(MockMvcResultMatchers.jsonPath("$.userEmailAddress").value("libby@lib.com"));
+//        }
 
 
 }
